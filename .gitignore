@@ -1,0 +1,28 @@
+# Firebase & Secrets
+GoogleService-Info.plist
+*firebase-adminsdk*.json
+*.xcconfig
+.env
+Secrets.swift
+
+# Apple Signing Certificates
+*.p12
+*.cer
+*.mobileprovision
+
+# Xcode User & Build Files
+xcuserdata/
+*.xcworkspace/xcuserdata/
+build/
+DerivedData/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager & CocoaPods
+.swiftpm/
+.build/
+Pods/
+
+# macOS System Files
+.DS_Store

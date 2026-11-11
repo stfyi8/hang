@@ -10,6 +10,15 @@
       "Base",
     ],
   },
+  "packages": [
+    {
+      "kind": "remote",
+      "repository": "https://github.com/firebase/firebase-ios-sdk.git",
+      "version": {
+        "version": "13.1.1",
+      },
+    },
+  ],
   "files": [
     { "kind": "folder", "path": "Hang", "target-membership": [ "Hang" ] },
     {
@@ -30,6 +39,21 @@
         "compile-sources",
         "frameworks",
         "resources",
+      ],
+      "package-product-members": [
+        {
+          "package": "firebase-ios-sdk",
+          "product-name": "FirebaseAnalytics",
+          "build-phase": { "build-phase": "frameworks" },
+        }, {
+          "package": "firebase-ios-sdk",
+          "product-name": "FirebaseCore",
+          "build-phase": { "build-phase": "frameworks" },
+        }, {
+          "package": "firebase-ios-sdk",
+          "product-name": "FirebaseFirestore",
+          "build-phase": { "build-phase": "frameworks" },
+        },
       ],
       "build-settings": {
         "ASSETCATALOG_COMPILER_APPICON_NAME": "AppIcon",
