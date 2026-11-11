@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseCore
+import FirebaseSignInWithApple
 
 
 @main
@@ -15,9 +16,12 @@ struct SwiftChallenge2App: App {
         FirebaseApp.configure()
         print("configured Firebase")
     }
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainView()
+                .configureFirebaseSignInWithAppleWith(firestoreUserCollectionPath: Path.Firestore.profiles)
+                
         }
     }
 }
