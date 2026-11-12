@@ -1,19 +1,15 @@
-//
-//  ContentView.swift
-//  Hang
-//
-//  Created by Lim Shi Hui Serene     on 11/11/26.
-//
-
 import SwiftUI
 
 struct ContentView: View {
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            TabView() {
+                Tab("We", systemImage: "person.and.person.fill") {
+                    WeView()
+                }
+                Tab("Me", systemImage: "smiley") {
+                }
+            }
         }
         .padding()
     }
