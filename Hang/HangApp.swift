@@ -20,7 +20,7 @@ struct SwiftChallenge2App: App {
     var body: some Scene {
         WindowGroup {
             MainView()
-                .configureFirebaseSignInWithAppleWith(firestoreUserCollectionPath: Path.Firestore.profiles)
+                .configureFirebaseSignInWithAppleWith(firestoreUserCollectionPath: ProfileData.accountName) // Path.Firestore.profiles
                 
         }
     }
