@@ -1,22 +1,22 @@
 import SwiftUI
 
 struct WeView: View {
-    @State var textSize = TextSize()
-    @State var sizing = Spacing()
+    @State var sizing = Sizing()
+    @State var colors = Colors()
     @State var searchQuery = ""
     @State var countPicker: Int = 0
     @State var Groups = [
-        TestGroups(name: "two", peopleCount: 2),
-        TestGroups(name: "three", peopleCount: 3),
-        TestGroups(name: "four", peopleCount: 4),
-        TestGroups(name: "five", peopleCount: 5),
-        TestGroups(name: "two2", peopleCount: 2),
-        TestGroups(name: "three2", peopleCount: 3),
-        TestGroups(name: "four2", peopleCount: 4),
-        TestGroups(name: "two3", peopleCount: 2),
-        TestGroups(name: "three3", peopleCount: 3)
+        TestGroup(name: "two", peopleCount: 2, time: 0),
+        TestGroup(name: "three", peopleCount: 3, time: 0),
+        TestGroup(name: "four", peopleCount: 4, time: 0),
+        TestGroup(name: "five", peopleCount: 5, time: 0),
+        TestGroup(name: "two2", peopleCount: 2, time: 0),
+        TestGroup(name: "three2", peopleCount: 3, time: 0),
+        TestGroup(name: "four2", peopleCount: 4, time: 0),
+        TestGroup(name: "two3", peopleCount: 2, time: 0),
+        TestGroup(name: "three3", peopleCount: 3, time: 0)
     ]
-    var results: [TestGroups] {
+    var results: [TestGroup] {
         var filtered = Groups
             // Filter 2: Apply search text filter
             if !searchQuery.isEmpty {
@@ -27,6 +27,9 @@ struct WeView: View {
             }
         return filtered
     }
+    let columns = [
+        GridItem(.adaptive(minimum: 150))
+        ]
     @FocusState var isFocused: Bool
     var body: some View {
         ZStack {
@@ -38,14 +41,13 @@ struct WeView: View {
                     TextField("Name", text: $searchQuery)
                         .textFieldStyle(.roundedBorder)
                     Divider()
-                        .scaledToFit()
-                        .overlay(Color.black)
-                        .frame(width: 5, height: 30)
+                        .frame(width: 1, height: 30)
+                        .overlay(colors.obj)
                         .padding(.horizontal, sizing.x1)
                     Image(systemName: "person.fill")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: sizing.x3)
+                        .frame(width: sizing.x4)
                     Picker("Headcount", selection: $countPicker) {
                             Text("N/A")
                                 .tag(0)
@@ -58,22 +60,87 @@ struct WeView: View {
                             .tint(.black)
                             .background(
                                 RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.black.opacity(0.15))
+                                    .fill(colors.obj.opacity(0.15))
                             )
-                } .padding(sizing.x3)
-                LazyVStack() {
-                    ForEach(results, id: \.self){ testGroup in
-                        Text("\(testGroup.name), \(testGroup.peopleCount)")
-                            .font(.system(size: textSize.x4))
-                        
-                    } .searchable(text: $searchQuery)
+                } .padding(15)
+                ScrollView {
+                    LazyVGrid(columns: columns, spacing: sizing.x1) {
+                        ForEach(results, id: \.self){ tg in
+                            Button {
+                                
+                            } label: {
+                                GroupCard(tg: tg)
+                            }
+                            .buttonStyle(setStyle(styleName: .Shrink2))
+                        }
+                    }
                 }
+                .padding(15)
+                .searchable(text: $searchQuery)
                 Spacer()
             }
             
         }
     }
         
+}
+
+struct GroupCard: View {
+    @State var sizing = Sizing()
+    @State var colors = Colors()
+    let tg : TestGroup
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 10)
+                .fill(colors.bg)
+                .aspectRatio(1, contentMode: .fit)
+            VStack(alignment: .leading) {
+                Text(tg.name)
+                    .font(.system(size: sizing.x6, weight: .bold))
+                    .foregroundStyle(colors.txt1)
+                    .padding(.bottom, -sizing.x1)
+                Divider()
+                    .frame(height: 1)
+                    .overlay(colors.obj)
+                Text(tg.desc)
+                        .font(.system(size: sizing.x3))
+                        .lineLimit(1)
+                        .foregroundStyle(colors.txt2)
+                HStack {
+                    Image(systemName: "calendar")
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundStyle(colors.obj)
+                        .frame(width: sizing.x3)
+                    Text(Date(timeIntervalSince1970: tg.time).formatted(date: .numeric, time: .omitted))
+                        .font(.system(size: sizing.x3))
+                        .foregroundStyle(colors.txt2)
+                }
+                HStack {
+                    Image(systemName: "clock")
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundStyle(colors.obj)
+                        .frame(width: sizing.x3)
+                    Text(Date(timeIntervalSince1970: tg.time).formatted(date: .omitted, time: .shortened))
+                        .font(.system(size: sizing.x3))
+                        .foregroundStyle(colors.txt2)
+                }
+                HStack {
+                    Text("\(tg.peopleCount)")
+                        .font(.system(size: sizing.x3, weight: .bold))
+                        .foregroundStyle(colors.txt2)
+                    Image(systemName: "person.2.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundStyle(colors.txt2)
+                        .frame(width: sizing.x4)
+                }
+            }
+            .padding(.vertical, sizing.x3)
+            .padding(.horizontal, sizing.x4)
+        } .padding(sizing.x1)
+    }
 }
 
 #Preview {
