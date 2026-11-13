@@ -1,10 +1,3 @@
-//
-//  CreateEventView.swift
-//  Hang
-//
-//  Created by T Krobot on 13/11/26.
-//
-
 import SwiftUI
 
 struct CreateEventView: View {
