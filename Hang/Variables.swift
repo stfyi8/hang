@@ -1,19 +1,6 @@
 import Foundation
 import SwiftUI
 
-public func colNormal(r: Int, g: Int, b: Int) -> Color{
-    let r1 = Double(r)/255.0
-    let g1 = Double(g)/255.0
-    let b1 = Double(b)/255.0
-    return Color(red: r1, green: g1, blue: b1)
-}
-public func colAlpha(r: Int, g: Int, b: Int, a: Double) -> Color{
-    let r1 = Double(r)/255.0
-    let g1 = Double(g)/255.0
-    let b1 = Double(b)/255.0
-    return Color(red: r1, green: g1, blue: b1).opacity(a)
-}
-
 public struct Colors {
     let bg = Color(red: 0.4, green: 0.7, blue: 0.6)
     let txt1 = Color(red: 0.1, green: 0.25, blue: 0.2)
