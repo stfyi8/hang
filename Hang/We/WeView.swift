@@ -5,33 +5,25 @@ struct WeView: View {
     var colors = Colors()
     @State var searchQuery = ""
     @State var countPicker: Int = 0
-    @State var Groups = [
-        TestGroup(code: "ABCD67", name: "CODZEE"),
-//        TestGroup(name: "Blowtorches"),
-//        TestGroup(name: "Order of the Rolling J"),
-//        TestGroup(name: "Club Automatica '26-7"),
-//        TestGroup(name: "Kiddy party"),
-//        TestGroup(name: "S101 girls"),
-//        TestGroup(name: "Friend chat"),
-//        TestGroup(name: "Are you free on 10th of November"),
-//        TestGroup(name: "ppl with a sungei bedok obsession"),
-//        TestGroup(name: "three3")
+    @State var groups = [
+        TestGroup(code: "ABCD67", name: "CODZEE")
     ]
     @State var showingCreateSheet = false
     @State var showingJoinSheet = false
+
     var results: [TestGroup] {
-        var filtered = Groups
-        // Filter 2: Apply search text filter
+        var filtered = groups
         if !searchQuery.isEmpty {
             filtered = filtered.filter {
                 $0.name.localizedCaseInsensitiveContains(searchQuery)
             }
         }
-        if !(countPicker == 0) {
+        if countPicker != 0 {
             filtered = filtered.filter { $0.members.count == countPicker }
         }
         return filtered
     }
+
     let columns = [
         GridItem(.adaptive(minimum: 150))
     ]
@@ -43,11 +35,9 @@ struct WeView: View {
                 VStack {
                     LazyVGrid(columns: columns, spacing: sizing.x1) {
                         ForEach(results) { tg in
-                            if let index = Groups.firstIndex(where: {
-                                $0.id == tg.id
-                            }) {
+                            if let index = groups.firstIndex(where: { $0.id == tg.id }) {
                                 NavigationLink {
-                                    GroupView(tg: $Groups[index])
+                                    GroupView(tg: $groups[index])
                                 } label: {
                                     GroupCard(tg: tg)
                                 }
@@ -64,7 +54,7 @@ struct WeView: View {
                 }
             }
             .sheet(isPresented: $showingCreateSheet) {
-                CreateGroupView(tgs: $Groups)
+                CreateGroupView(tgs: $groups)
                     .presentationDetents([.medium])
             }
             .sheet(isPresented: $showingJoinSheet) {
@@ -75,7 +65,8 @@ struct WeView: View {
             .toolbarTitleDisplayMode(.inlineLarge)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Profile", systemImage: "person.fill") {
+                    NavigationLink(destination: ProfileView()) {
+                        Label("Profile", systemImage: "person.fill")
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
@@ -93,13 +84,13 @@ struct WeView: View {
             }
         }
     }
-
 }
 
 struct GroupCard: View {
     var sizing = Sizing()
     var colors = Colors()
     let tg: TestGroup
+
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
@@ -132,33 +123,11 @@ struct GroupCard: View {
             }
             .padding(.vertical, sizing.x3)
             .padding(.horizontal, sizing.x4)
-        } .padding(5)
+        }
+        .padding(5)
     }
 }
 
 #Preview {
     WeView()
 }
-
-/*
-HStack {
-    Image(systemName: "calendar")
-        .resizable()
-        .scaledToFit()
-        .foregroundStyle(colors.obj)
-        .frame(width: sizing.x3)
-    Text(Date(timeIntervalSince1970: tg.time).formatted(date: .numeric, time: .omitted))
-        .font(.system(size: sizing.x3))
-        .foregroundStyle(colors.txt2)
-}
-HStack {
-    Image(systemName: "clock")
-        .resizable()
-        .scaledToFit()
-        .foregroundStyle(colors.obj)
-        .frame(width: sizing.x3)
-    Text(Date(timeIntervalSince1970: tg.time).formatted(date: .omitted, time: .shortened))
-        .font(.system(size: sizing.x3))
-        .foregroundStyle(colors.txt2)
-}
-*/

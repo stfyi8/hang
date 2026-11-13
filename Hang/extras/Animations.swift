@@ -27,19 +27,47 @@ struct Sizing: DynamicProperty {
     @ScaledMetric var x10: CGFloat = 50
 }
 
+public struct TestGroup: Hashable, Identifiable {
+    public let id = UUID()
+    public let code: String
+    var name: String
+    var desc: String = "Add description here..."
+    var members: [Person] = [
+        Person(name: "Tiffany", status: "hello"),
+        Person(name: "Serene", status: "hi"),
+        Person(name: "Iain", status: "hey"),
+        Person(name: "Zixi", status: "wassup"),
+    ]
+    var events: [GroupEvents] = []
+}
+
+public struct GroupEvents: Hashable, Identifiable {
+    public let id = UUID()
+    var name: String
+    var desc: String = "Add description here..."
+    var time: Double
+}
+
+public struct Person: Hashable, Identifiable {
+    public let id = UUID()
+    var name: String
+    var status: String = "Add description here..."
+}
+
 public enum clickStyle {
     case None, Tint, Fade, Shrink1, Shrink2
 }
 
-public struct setStyle : ButtonStyle {
+public struct setStyle: ButtonStyle {
     public let styleName: clickStyle
+
     public func makeBody(configuration: Configuration) -> some View {
         switch styleName {
         case .None:
             configuration.label
         case .Tint:
             configuration.label
-                .overlay{
+                .overlay {
                     Color.black
                         .opacity(configuration.isPressed ? 0.2 : 0)
                 }

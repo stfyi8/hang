@@ -13,14 +13,15 @@
   "packages": [
     {
       "kind": "remote",
-      "repository": "https://github.com/firebase/firebase-ios-sdk.git",
+      "repository": "https://github.com/rebeloper/FirebaseSignInWithApple.git",
       "version": {
-        "version": "13.1.1",
+        "up-to-next-major-version": "6.0.1",
       },
     },
   ],
   "files": [
     { "kind": "folder", "path": "Hang", "target-membership": [ "Hang" ] },
+    { "kind": "group", "name": "Frameworks" },
     { "path": "GoogleService-Info.plist", "target-membership": [ "Hang/resources" ] },
     {
       "kind": "group",
@@ -43,24 +44,18 @@
       ],
       "package-product-members": [
         {
-          "package": "firebase-ios-sdk",
-          "product-name": "FirebaseAnalytics",
-          "build-phase": { "build-phase": "frameworks" },
-        }, {
-          "package": "firebase-ios-sdk",
-          "product-name": "FirebaseCore",
-          "build-phase": { "build-phase": "frameworks" },
-        }, {
-          "package": "firebase-ios-sdk",
-          "product-name": "FirebaseFirestore",
+          "package": "FirebaseSignInWithApple",
+          "product-name": "FirebaseSignInWithApple",
           "build-phase": { "build-phase": "frameworks" },
         },
       ],
       "build-settings": {
         "ASSETCATALOG_COMPILER_APPICON_NAME": "AppIcon",
         "ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME": "AccentColor",
+        "CODE_SIGN_ENTITLEMENTS": "Hang/extras/Hang.entitlements",
         "CODE_SIGN_STYLE": "Automatic",
         "CURRENT_PROJECT_VERSION": "1",
+        "DEVELOPMENT_TEAM": "",
         "ENABLE_APP_SANDBOX": "YES",
         "ENABLE_PREVIEWS": "YES",
         "ENABLE_USER_SELECTED_FILES": "readonly",

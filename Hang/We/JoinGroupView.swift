@@ -1,17 +1,9 @@
-//
-//  CreateGroupView.swift
-//  Hang
-//
-//  Created by T Krobot on 11/11/26.
-//
-
 import SwiftUI
 
 struct JoinGroupView: View {
     let codeLength = 6
-    @State private var groupname: String = ""
-    @State private var code: String = ""
-    @State private var showAlert: Bool = false
+    @State private var code = ""
+    @State private var showAlert = false
     @FocusState private var isFocused: Bool
 
     var body: some View {
@@ -36,8 +28,7 @@ struct JoinGroupView: View {
                         .foregroundColor(.clear)
                         .background(Color.clear)
                         .onChange(of: code) { _, newValue in
-                            code = String(newValue.prefix(codeLength))
-                                .uppercased()
+                            code = String(newValue.prefix(codeLength)).uppercased()
                         }
                 }
                 .contentShape(Rectangle())
@@ -60,10 +51,10 @@ struct JoinGroupView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Confirm", systemImage: "checkmark") {
+                        // TODO: look the code up in Firestore instead of hard-coding it.
                         if code != "CODZEE" {
                             showAlert = true
                         }
-                        // Add action
                     }
                 }
             }

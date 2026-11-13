@@ -1,17 +1,27 @@
+//
+//  HangApp.swift
+//  Hang
+//
+//  Created by Lim Shi Hui Serene on 11/11/26.
+//
+
 import SwiftUI
 import FirebaseCore
-
+import FirebaseSignInWithApple
 
 @main
 struct SwiftChallenge2App: App {
-    init(){
+    init() {
         FirebaseApp.configure()
         print("configured Firebase")
         UISegmentedControl.appearance().selectedSegmentTintColor = .brown
     }
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainView()
+                // FirebaseSignInWithApple creates Profiles/<uid> for every new account
+                .configureFirebaseSignInWithAppleWith(firestoreUserCollectionPath: Path.Firestore.profiles)
         }
     }
 }

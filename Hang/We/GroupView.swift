@@ -17,23 +17,22 @@ struct GroupView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                // colors.green1
-                // .ignoresSafeArea()
                 VStack {
                     Picker("Picker", selection: $selectedGroupTab) {
-                        ForEach(GroupTab.allCases) {
-                            gtab in
+                        ForEach(GroupTab.allCases) { gtab in
                             Text(gtab.rawValue)
                         }
                     }
                     .padding()
                     .pickerStyle(.segmented)
-                    if selectedGroupTab == .cal {
+
+                    switch selectedGroupTab {
+                    case .cal:
                         CalendarView(tg: $tg)
                             .padding()
-                    } else if selectedGroupTab == .events {
+                    case .events:
                         EventView(tg: $tg)
-                    } else if selectedGroupTab == .info {
+                    case .info:
                         MoreInfoView(tg: $tg)
                     }
                 }
@@ -61,15 +60,14 @@ struct CalendarView: View {
     var sizing = Sizing()
     var colors = Colors()
     @Binding var tg: TestGroup
+
     var body: some View {
         VStack {
             ZStack {
                 Rectangle()
-                    //                    .fill(colors.green2)
                     .frame(height: 300)
                 Text("calendar goes here")
                     .bold()
-                //                    .foregroundStyle(colors.txt2)
             }
             .padding(.vertical)
 
@@ -82,8 +80,8 @@ struct EventView: View {
     var sizing = Sizing()
     var colors = Colors()
     @Binding var tg: TestGroup
+
     var body: some View {
-        //        VStack {
         List {
             ForEach($tg.events) { $event in
                 VStack(alignment: .leading) {
@@ -98,18 +96,16 @@ struct EventView: View {
                                 .formatted(date: .numeric, time: .shortened)
                         )
                         .font(.system(size: sizing.x4))
-
                     }
                     Text(event.desc)
                         .font(.system(size: sizing.x3))
                         .lineLimit(1)
-
                 }
                 .listRowBackground(Color(.systemGray6))
             }
-        }.padding(.top, -sizing.x4)
+        }
+        .padding(.top, -sizing.x4)
         .scrollContentBackground(.hidden)
-
     }
 }
 
@@ -117,6 +113,7 @@ struct MoreInfoView: View {
     var sizing = Sizing()
     var colors = Colors()
     @Binding var tg: TestGroup
+
     var body: some View {
         ScrollView {
             VStack {

@@ -2,21 +2,17 @@ import SwiftUI
 
 struct CreateGroupView: View {
     @Environment(\.dismiss) private var dismiss
-    @State var groupname: String = ""
-    @State var code: String = ""
-    @Binding var tgs: Array<TestGroup>
+    @State private var groupName = ""
+    @State private var code = ""
+    @Binding var tgs: [TestGroup]
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 32) {
-                TextField("Group name", text: $groupname)
+                TextField("Group name", text: $groupName)
                     .padding()
                     .background(Color(.secondarySystemBackground))
                     .clipShape(.capsule)
-
-                //                Button("Confirm") {
-                //                }
-                //                .buttonStyle(.glassProminent)
-                //                .controlSize(.large)
 
                 VStack {
                     Text("Invite friends with code")
@@ -35,26 +31,17 @@ struct CreateGroupView: View {
             .padding()
             .navigationTitle("Create Group")
             .toolbar {
-                // Top-right button with SF Symbol
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Confirm", systemImage: "checkmark") {
-                        // Add action
-                        tgs.append(TestGroup(code: code, name: groupname))
+                        tgs.append(TestGroup(code: code, name: groupName))
                         dismiss()
                     }
                 }
             }
         }
         .onAppear {
-            var candidateCode = generateRandomCode()
-            var uniqueCodeFound = false
-            while !uniqueCodeFound {
-                // check if its NOT in firebase
-                uniqueCodeFound = true
-                // else, candidateCode = generateRandomCode()
-            }
-            // finally, show the REAL code
-            code = generateRandomCode()  // put real code here
+            // TODO: keep generating until the code is not already in Firestore.
+            code = generateRandomCode()
         }
     }
 
