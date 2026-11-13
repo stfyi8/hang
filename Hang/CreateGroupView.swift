@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CreateGroupView: View {
     @State var groupname: String = ""
-    @State var code: String = "ABCXYZ"
+    @State var code: String = ""
 
     var body: some View {
         NavigationStack {
@@ -49,6 +49,17 @@ struct CreateGroupView: View {
                 }
             }
         }
+        .onAppear {
+            var candidateCode = generateRandomCode()
+            var uniqueCodeFound = false
+            while !uniqueCodeFound {
+                // check if its NOT in firebase
+                uniqueCodeFound = true
+                // else, candidateCode = generateRandomCode()
+            }
+            // finally, show the REAL code
+            code = "ABCD67"  // put real code here
+        }
     }
 
     @ViewBuilder
@@ -66,6 +77,13 @@ struct CreateGroupView: View {
         guard index < code.count else { return "" }
         let stringIndex = code.index(code.startIndex, offsetBy: index)
         return String(code[stringIndex])
+    }
+
+    private func generateRandomCode(length: Int = 6) -> String {
+        let characters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+        return String(
+            (0..<length).compactMap { _ in characters.randomElement() }
+        )
     }
 }
 

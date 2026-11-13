@@ -76,10 +76,10 @@ struct WeView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Menu {
-                        Button("Create") {
+                        Button("Create", systemImage: "star") {
                             showingCreateSheet = true
                         }
-                        Button("Join") {
+                        Button("Join", systemImage: "person.badge.plus") {
                             showingJoinSheet = true
                         }
                     } label: {
