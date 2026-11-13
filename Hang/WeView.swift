@@ -62,7 +62,7 @@ struct WeView: View {
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(colors.obj.opacity(0.15))
                             )
-                } .padding(15)
+                } .padding()
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: sizing.x1) {
                         ForEach(results, id: \.self){ tg in
@@ -74,10 +74,12 @@ struct WeView: View {
                             .buttonStyle(setStyle(styleName: .Shrink2))
                         }
                     }
+                    .padding()
                 }
-                .padding(15)
+                .ignoresSafeArea()
+//                .padding(15)
                 .searchable(text: $searchQuery)
-                Spacer()
+//                Spacer()
             }
             
         }
