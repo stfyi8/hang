@@ -2,8 +2,9 @@ import SwiftUI
 
 struct JoinGroupView: View {
     let codeLength = 6
-    @State var groupname: String = ""
-    @State var code: String = ""
+    @State private var groupname: String = ""
+    @State private var code: String = ""
+    @State private var showAlert: Bool = false
     @FocusState private var isFocused: Bool
 
     var body: some View {
@@ -28,7 +29,8 @@ struct JoinGroupView: View {
                         .foregroundColor(.clear)
                         .background(Color.clear)
                         .onChange(of: code) { _, newValue in
-                            code = String(newValue.prefix(codeLength)).uppercased()
+                            code = String(newValue.prefix(codeLength))
+                                .uppercased()
                         }
                 }
                 .contentShape(Rectangle())
@@ -43,11 +45,18 @@ struct JoinGroupView: View {
             }
             .padding()
             .navigationTitle("Join Group")
+            .alert("Group not found", isPresented: $showAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("Please double-check the entered group code.")
+            }
             .toolbar {
                 // Top-right button with SF Symbol
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Confirm", systemImage: "checkmark") {
-                        // Add action
+                        if code != "CODZEE" {
+                            showAlert = true
+                        }
                     }
                 }
             }
