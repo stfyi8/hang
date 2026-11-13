@@ -2,7 +2,13 @@ import Foundation
 import SwiftUI
 
 public struct Colors {
-    let bg = Color(red: 0.4, green: 0.7, blue: 0.6)
+    let green = Color(red: 0.4, green: 0.7, blue: 0.6)
+    let green1 = Color(red: 0.6, green: 0.9, blue: 0.8)
+    let green2 = Color(red: 0.7, green: 1, blue: 0.9)
+    let dgreen = Color(red: 0.2, green: 0.5, blue: 0.4)
+    let dgreen1 = Color(red: 0.1, green: 0.4, blue: 0.3)
+    let dgreen2 = Color(red: 0, green: 0.3, blue: 0.2)
+    let brown = Color.brown
     let txt1 = Color(red: 0.1, green: 0.25, blue: 0.2)
     let txt2 = Color(red: 0.05, green: 0.2, blue: 0.15)
     let obj = Color(red: 0.25, green: 0.15, blue: 0)

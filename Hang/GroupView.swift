@@ -13,28 +13,33 @@ struct GroupView: View {
     var colors = Colors()
     @Binding var tg: TestGroup
     @State private var selectedGroupTab: GroupTab = .events
+    
     var body: some View {
         NavigationStack {
-            VStack {
-                Picker("Picker", selection: $selectedGroupTab) {
-                    ForEach(GroupTab.allCases) {
-                        gtab in
-                        Text(gtab.rawValue)
-                        
-                        
+            ZStack {
+                colors.bg1
+                    .ignoresSafeArea()
+                VStack {
+                    Picker("Picker", selection: $selectedGroupTab) {
+                        ForEach(GroupTab.allCases) {
+                            gtab in
+                            Text(gtab.rawValue)
+                            
+                            
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    if selectedGroupTab == .cal {
+                        CalendarView(tg: $tg)
+                    } else if selectedGroupTab == .events {
+                        EventView(tg: $tg)
+                    } else if selectedGroupTab == .info {
+                        MoreInfoView(tg: $tg)
                     }
                 }
-                .pickerStyle(.segmented)
-                if selectedGroupTab == .cal {
-                    CalendarView(tg: $tg)
-                } else if selectedGroupTab == .events {
-                    EventView(tg: $tg)
-                } else if selectedGroupTab == .info {
-                    MoreInfoView(tg: $tg)
-                }
+                .padding()
+                .navigationTitle(tg.name)
             }
-            .padding()
-            .navigationTitle(tg.name)
         }
     }
 }
@@ -51,7 +56,7 @@ struct CalendarView: View {
         VStack {
             ZStack {
                 Rectangle()
-                    .fill(colors.bg)
+                    .fill(colors.bg2)
                     .frame(height: 300)
                 Text("calendar goes here")
                     .bold()
@@ -88,11 +93,14 @@ struct EventView: View {
                             .lineLimit(1)
                         
                     }
+                    .listRowBackground(colors.bg2)
+                    
+                    
                     
                 }
-                
-                
             }
+            .padding(.horizontal, -sizing.x2)
+            .scrollContentBackground(.hidden)
             
             Spacer()
         }
