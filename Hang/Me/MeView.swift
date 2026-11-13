@@ -151,7 +151,7 @@ struct PersonalCalendarView: View {
         }
         .sheet(isPresented: $isShowingCreateEvent) {
             CreateEventView(
-                events: $tg.events,
+                tg: $tg,
                 initialDate: selectedDate ?? Date()
             )
         }

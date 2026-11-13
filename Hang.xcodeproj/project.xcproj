@@ -22,7 +22,6 @@
   "files": [
     { "kind": "folder", "path": "Hang", "target-membership": [ "Hang" ] },
     { "kind": "group", "name": "Frameworks" },
-    { "path": "GoogleService-Info.plist", "target-membership": [ "Hang/resources" ] },
     {
       "kind": "group",
       "name": "Products",
