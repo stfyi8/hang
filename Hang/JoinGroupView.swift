@@ -3,7 +3,7 @@ import SwiftUI
 struct JoinGroupView: View {
     let codeLength = 6
     @State var groupname: String = ""
-    @State var code: String = "ABCXYZ"
+    @State var code: String = ""
     @FocusState private var isFocused: Bool
 
     var body: some View {

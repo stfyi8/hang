@@ -16,58 +16,35 @@ struct WeView: View {
         TestGroup(name: "two3", peopleCount: 2),
         TestGroup(name: "three3", peopleCount: 3)
     ]
+    @State var showingCreateSheet = false
+    @State var showingJoinSheet = false
+
     var results: [TestGroup] {
         var filtered = Groups
-            // Filter 2: Apply search text filter
-            if !searchQuery.isEmpty {
-                filtered = filtered.filter { $0.name.localizedCaseInsensitiveContains(searchQuery) }
+        // Filter 2: Apply search text filter
+        if !searchQuery.isEmpty {
+            filtered = filtered.filter {
+                $0.name.localizedCaseInsensitiveContains(searchQuery)
             }
+        }
         if !(countPicker == 0) {
-                filtered = filtered.filter { $0.peopleCount == countPicker }
-            }
+            filtered = filtered.filter { $0.peopleCount == countPicker }
+        }
         return filtered
     }
     let columns = [
         GridItem(.adaptive(minimum: 150))
-        ]
+    ]
     @FocusState var isFocused: Bool
+
     var body: some View {
-        ZStack {
-            Color(red: 1, green: 1, blue: 1)
-                .ignoresSafeArea()
-                .onTapGesture { isFocused = false }
-            VStack {
-                HStack {
-                    TextField("Name", text: $searchQuery)
-                        .textFieldStyle(.roundedBorder)
-                    Divider()
-                        .frame(width: 1, height: 30)
-                        .overlay(colors.obj)
-                        .padding(.horizontal, sizing.x1)
-                    Image(systemName: "person.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: sizing.x4)
-                    Picker("Headcount", selection: $countPicker) {
-                            Text("N/A")
-                                .tag(0)
-                        ForEach(2...10, id: \.self) { x in
-                                    Text("\(x)")
-                                .tag(x)
-                                }
-                            }
-                            .pickerStyle(.menu)
-                            .tint(.black)
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(colors.obj.opacity(0.15))
-                            )
-                } .padding()
-                ScrollView {
+        NavigationStack {
+            ScrollView {
+                VStack {
                     LazyVGrid(columns: columns, spacing: sizing.x1) {
-                        ForEach(results, id: \.self){ tg in
+                        ForEach(results, id: \.self) { tg in
                             Button {
-                                
+
                             } label: {
                                 GroupCard(tg: tg)
                             }
@@ -75,22 +52,50 @@ struct WeView: View {
                         }
                     }
                     .padding()
+                    .ignoresSafeArea()
+                    .searchable(
+                        text: $searchQuery,
+                        placement: .navigationBarDrawer(displayMode: .always)
+                    )
                 }
-                .ignoresSafeArea()
-//                .padding(15)
-                .searchable(text: $searchQuery)
-//                Spacer()
             }
-            
+            .sheet(isPresented: $showingCreateSheet) {
+                CreateGroupView()
+                    .presentationDetents([.medium])
+            }
+            .sheet(isPresented: $showingJoinSheet) {
+                JoinGroupView()
+                    .presentationDetents([.medium])
+            }
+            .navigationTitle("Groups")
+            .toolbarTitleDisplayMode(.inlineLarge)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Profile", systemImage: "person.fill") {
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Menu {
+                        Button("Create") {
+                            showingCreateSheet = true
+                        }
+                        Button("Join") {
+                            showingJoinSheet = true
+                        }
+                    } label: {
+                        Label("Add", systemImage: "plus")
+                    }
+                }
+            }
         }
     }
-        
+
 }
 
 struct GroupCard: View {
     @State var sizing = Sizing()
     @State var colors = Colors()
-    let tg : TestGroup
+    let tg: TestGroup
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
