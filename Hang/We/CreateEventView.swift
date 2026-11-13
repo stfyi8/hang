@@ -1,10 +1,3 @@
-//
-//  CreateEventView.swift
-//  Hang
-//
-//  Created by T Krobot on 13/11/26.
-//
-
 import SwiftUI
 
 struct CreateEventView: View {
@@ -12,7 +5,7 @@ struct CreateEventView: View {
     @State private var eventDesc = ""
     @State private var eventLocation = ""
     @State private var eventTime = ""
-    
+
     var body: some View {
         NavigationStack {
             List {
@@ -26,7 +19,7 @@ struct CreateEventView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Confirm", systemImage: "checkmark") {
-                        // Add action
+                        // TODO: add the event to the group.
                     }
                 }
             }

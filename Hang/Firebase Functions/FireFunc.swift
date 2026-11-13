@@ -2,7 +2,7 @@
 //  FireFunc.swift
 //  Hang
 //
-//  Created by Lim Shi Hui Serene     on 12/11/26.
+//  Created by Lim Shi Hui Serene on 12/11/26.
 //
 
 import SwiftUI
@@ -25,7 +25,7 @@ class SaveManager: ObservableObject {
     }
 
     // Create / update the signed-in user's own profile
-    func addNote(username: String) {
+    func saveUsername(_ username: String) {
         guard let profileDocument else { return }
         do {
             // merge: true keeps the userId field written by FirebaseSignInWithApple
@@ -36,7 +36,7 @@ class SaveManager: ObservableObject {
     }
 
     // Read the signed-in user's own profile
-    func getNotes() {
+    func loadProfile() {
         listener?.remove()
         hasLoadedProfile = false
         guard let profileDocument else {
@@ -47,29 +47,32 @@ class SaveManager: ObservableObject {
 
         // Same document ID as the one FirebaseSignInWithApple created on sign in,
         // so this only ever listens to the current user's data.
-        listener = profileDocument.addSnapshotListener { snapshot, error in
-            // Every path below finishes the load, including errors, so the UI
-            // doesn't sit waiting forever.
-            defer { self.hasLoadedProfile = true }
+        listener = profileDocument.addSnapshotListener { [weak self] snapshot, error in
+            guard let self else { return }
+            Task { @MainActor in
+                // Every path below finishes the load, including errors, so the UI
+                // doesn't sit waiting forever.
+                self.hasLoadedProfile = true
 
-            if let error = error {
-                print("Error getting profile: \(error)")
-                return
+                if let error {
+                    print("Error getting profile: \(error)")
+                    return
+                }
+                guard let snapshot, snapshot.exists else {
+                    self.profile = nil  // no profile saved for this account yet
+                    return
+                }
+                self.profile = try? snapshot.data(as: ProfileData.self)
             }
-            guard let snapshot, snapshot.exists else {
-                self.profile = nil // no profile saved for this account yet
-                return
-            }
-            self.profile = try? snapshot.data(as: ProfileData.self)
         }
     }
 
     // Delete the signed-in user's profile
-    func deleteNote(save: ProfileData) {
-        guard let noteID = save.id else { return }
+    func deleteProfile(_ profile: ProfileData) {
+        guard let profileID = profile.id else { return }
 
-        db.collection(Path.Firestore.profiles).document(noteID).delete { error in
-            if let error = error {
+        db.collection(Path.Firestore.profiles).document(profileID).delete { error in
+            if let error {
                 print("Error deleting profile: \(error)")
             }
         }

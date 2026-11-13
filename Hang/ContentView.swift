@@ -15,7 +15,7 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            saveManager.getNotes()
+            saveManager.loadProfile()
         }
         .onChange(of: saveManager.hasLoadedProfile) { _, loaded in
             guard loaded else { return }
@@ -28,7 +28,7 @@ struct ContentView: View {
             Button("Done") {
                 let trimmedName = userName.trimmingCharacters(in: .whitespacesAndNewlines)
                 guard !trimmedName.isEmpty else { return }
-                saveManager.addNote(username: trimmedName)
+                saveManager.saveUsername(trimmedName)
                 userName = ""
             }
             Button("Cancel", role: .cancel) {}

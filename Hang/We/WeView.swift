@@ -5,32 +5,25 @@ struct WeView: View {
     var colors = Colors()
     @State var searchQuery = ""
     @State var countPicker: Int = 0
-    @State var Groups = [
-        TestGroup(name: "two", peopleCount: 2),
-        TestGroup(name: "three", peopleCount: 3),
-        TestGroup(name: "four", peopleCount: 4),
-        TestGroup(name: "five", peopleCount: 5),
-        TestGroup(name: "two2", peopleCount: 2),
-        TestGroup(name: "three2", peopleCount: 3),
-        TestGroup(name: "four2", peopleCount: 4),
-        TestGroup(name: "two3", peopleCount: 2),
-        TestGroup(name: "three3", peopleCount: 3)
+    @State var groups = [
+        TestGroup(code: "ABCD67", name: "CODZEE")
     ]
     @State var showingCreateSheet = false
     @State var showingJoinSheet = false
+
     var results: [TestGroup] {
-        var filtered = Groups
-        // Filter 2: Apply search text filter
+        var filtered = groups
         if !searchQuery.isEmpty {
             filtered = filtered.filter {
                 $0.name.localizedCaseInsensitiveContains(searchQuery)
             }
         }
-        if !(countPicker == 0) {
-            filtered = filtered.filter { $0.peopleCount == countPicker }
+        if countPicker != 0 {
+            filtered = filtered.filter { $0.members.count == countPicker }
         }
         return filtered
     }
+
     let columns = [
         GridItem(.adaptive(minimum: 150))
     ]
@@ -42,14 +35,14 @@ struct WeView: View {
                 VStack {
                     LazyVGrid(columns: columns, spacing: sizing.x1) {
                         ForEach(results) { tg in
-                            if let index = Groups.firstIndex(where: { $0.id == tg.id }) {
-                                        NavigationLink {
-                                            GroupView(tg: $Groups[index])
-                                        } label: {
-                                            GroupCard(tg: tg)
-                                        }
-                                        .buttonStyle(setStyle(styleName: .Shrink2))
-                                    }
+                            if let index = groups.firstIndex(where: { $0.id == tg.id }) {
+                                NavigationLink {
+                                    GroupView(tg: $groups[index])
+                                } label: {
+                                    GroupCard(tg: tg)
+                                }
+                                .buttonStyle(setStyle(styleName: .Shrink2))
+                            }
                         }
                     }
                     .padding()
@@ -61,7 +54,7 @@ struct WeView: View {
                 }
             }
             .sheet(isPresented: $showingCreateSheet) {
-                CreateGroupView()
+                CreateGroupView(tgs: $groups)
                     .presentationDetents([.medium])
             }
             .sheet(isPresented: $showingJoinSheet) {
@@ -75,7 +68,6 @@ struct WeView: View {
                     NavigationLink(destination: ProfileView()) {
                         Label("Profile", systemImage: "person.fill")
                     }
-
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Menu {
@@ -92,13 +84,13 @@ struct WeView: View {
             }
         }
     }
-
 }
 
 struct GroupCard: View {
     var sizing = Sizing()
     var colors = Colors()
     let tg: TestGroup
+
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
@@ -106,19 +98,21 @@ struct GroupCard: View {
                 .aspectRatio(1, contentMode: .fit)
             VStack(alignment: .leading) {
                 Text(tg.name)
-                    .font(.system(size: sizing.x6, weight: .bold))
+                    .font(.system(size: sizing.x5, weight: .bold))
+                    .lineLimit(1)
                     .foregroundStyle(colors.txt1)
                     .padding(.bottom, -sizing.x1)
                 Divider()
                     .frame(height: 1)
                     .overlay(colors.obj)
+                    .padding(.vertical, sizing.x2)
                 Text(tg.desc)
-                        .font(.system(size: sizing.x3))
-                        .lineLimit(1)
-                        .foregroundStyle(colors.txt2)
+                    .font(.system(size: sizing.x3))
+                    .lineLimit(1)
+                    .foregroundStyle(colors.txt2)
                 HStack {
-                    Text("\(tg.peopleCount)")
-                        .font(.system(size: sizing.x3, weight: .bold))
+                    Text("\(tg.members.count)")
+                        .font(.system(size: sizing.x4, weight: .bold))
                         .foregroundStyle(colors.txt2)
                     Image(systemName: "person.2.fill")
                         .resizable()
@@ -129,33 +123,11 @@ struct GroupCard: View {
             }
             .padding(.vertical, sizing.x3)
             .padding(.horizontal, sizing.x4)
-        } .padding(sizing.x1)
+        }
+        .padding(5)
     }
 }
 
 #Preview {
     WeView()
 }
-
-/*
-HStack {
-    Image(systemName: "calendar")
-        .resizable()
-        .scaledToFit()
-        .foregroundStyle(colors.obj)
-        .frame(width: sizing.x3)
-    Text(Date(timeIntervalSince1970: tg.time).formatted(date: .numeric, time: .omitted))
-        .font(.system(size: sizing.x3))
-        .foregroundStyle(colors.txt2)
-}
-HStack {
-    Image(systemName: "clock")
-        .resizable()
-        .scaledToFit()
-        .foregroundStyle(colors.obj)
-        .frame(width: sizing.x3)
-    Text(Date(timeIntervalSince1970: tg.time).formatted(date: .omitted, time: .shortened))
-        .font(.system(size: sizing.x3))
-        .foregroundStyle(colors.txt2)
-}
-*/
