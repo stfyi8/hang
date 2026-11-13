@@ -12,7 +12,7 @@ struct GroupView: View {
     var sizing = Sizing()
     var colors = Colors()
     @Binding var tg: TestGroup
-    @State private var selectedGroupTab: GroupTab = .events
+    @State private var selectedGroupTab: GroupTab = .info
     
     var body: some View {
         NavigationStack {
@@ -45,7 +45,10 @@ struct GroupView: View {
 }
 
 #Preview {
-    GroupView(tg: .constant(TestGroup(name: "two", peopleCount: 2)))
+    GroupView(tg: .constant(TestGroup(name: "CODZEE", events: [
+        GroupEvents(name: "event1", time: 1720708600),
+        GroupEvents(name: "event2", time: 1790403500)
+    ])))
 }
 
 struct CalendarView: View {
@@ -108,12 +111,44 @@ struct EventView: View {
 }
 
 struct MoreInfoView: View {
+    var sizing = Sizing()
+    var colors = Colors()
     @Binding var tg: TestGroup
     var body: some View {
-        VStack {
-            
-            Spacer()
+        ScrollView {
+            VStack(alignment: .leading) {
+                Text("Description")
+                    .font(.system(size: sizing.x6, weight: .bold))
+                Text(tg.desc)
+                    .font(.system(size: sizing.x5))
+                Divider()
+                    .frame(height: 0.8)
+                    .overlay(.black)
+                    .padding(.vertical, sizing.x2)
+                Text("Members (\(tg.members.count))")
+                    .font(.system(size: sizing.x6, weight: .bold))
+                ForEach(tg.members) { member in
+                    HStack {
+                        Image(systemName: "person.crop.circle")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: sizing.x10)
+                            .fontWeight(.light)
+                        VStack(alignment: .leading) {
+                            Text(member.name)
+                                .font(.system(size: sizing.x5))
+                            Text(member.status)
+                                .font(.system(size: sizing.x4))
+                                .lineLimit(1)
+                        }
+                    }
+                }
+                
+                
+            }
         }
+        .padding(.horizontal, sizing.x2)
+        .padding(.vertical, sizing.x4)
     }
 }
 

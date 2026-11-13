@@ -23,6 +23,8 @@ struct Sizing: DynamicProperty {
     @ScaledMetric var x6: CGFloat = 30
     @ScaledMetric var x7: CGFloat = 35
     @ScaledMetric var x8: CGFloat = 40
+    @ScaledMetric var x9: CGFloat = 45
+    @ScaledMetric var x10: CGFloat = 50
 }
 
 
@@ -30,11 +32,13 @@ public struct TestGroup: Hashable, Identifiable {
     public let id = UUID()
     var name: String
     var desc: String = "Add description here..."
-    var peopleCount: Int
-    var events : Array<GroupEvents> = [
-        GroupEvents(name: "event1", time: 1720708600),
-        GroupEvents(name: "event2", time: 1790403500)
+    var members : Array<Person> = [
+        Person(name: "Tiffany", status: "hello"),
+        Person(name: "Serene", status: "hi"),
+        Person(name: "Iain", status: "hey"),
+        Person(name: "Zixi", status: "wassup")
     ]
+    var events : Array<GroupEvents> = []
 }
 
 public struct GroupEvents: Hashable, Identifiable {
@@ -42,6 +46,11 @@ public struct GroupEvents: Hashable, Identifiable {
     var name: String
     var desc: String = "Add description here..."
     var time: Double
+}
+public struct Person: Hashable, Identifiable {
+    public let id = UUID()
+    var name: String
+    var status: String = "Add description here..."
 }
 
 public enum clickStyle {

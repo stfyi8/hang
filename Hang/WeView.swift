@@ -6,15 +6,7 @@ struct WeView: View {
     @State var searchQuery = ""
     @State var countPicker: Int = 0
     @State var Groups = [
-        TestGroup(name: "two", peopleCount: 2),
-        TestGroup(name: "three", peopleCount: 3),
-        TestGroup(name: "four", peopleCount: 4),
-        TestGroup(name: "five", peopleCount: 5),
-        TestGroup(name: "two2", peopleCount: 2),
-        TestGroup(name: "three2", peopleCount: 3),
-        TestGroup(name: "four2", peopleCount: 4),
-        TestGroup(name: "two3", peopleCount: 2),
-        TestGroup(name: "three3", peopleCount: 3)
+        TestGroup(name: "CODZEE")
     ]
     @State var showingCreateSheet = false
     @State var showingJoinSheet = false
@@ -27,7 +19,7 @@ struct WeView: View {
             }
         }
         if !(countPicker == 0) {
-            filtered = filtered.filter { $0.peopleCount == countPicker }
+            filtered = filtered.filter { $0.members.count == countPicker }
         }
         return filtered
     }
@@ -115,7 +107,7 @@ struct GroupCard: View {
                         .lineLimit(1)
                         .foregroundStyle(colors.txt2)
                 HStack {
-                    Text("\(tg.peopleCount)")
+                    Text("\(tg.members.count)")
                         .font(.system(size: sizing.x3, weight: .bold))
                         .foregroundStyle(colors.txt2)
                     Image(systemName: "person.2.fill")
