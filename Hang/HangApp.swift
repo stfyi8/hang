@@ -14,7 +14,7 @@ struct SwiftChallenge2App: App {
     init() {
         FirebaseApp.configure()
         print("configured Firebase")
-        UISegmentedControl.appearance().selectedSegmentTintColor = .brown
+        UISegmentedControl.appearance().selectedSegmentTintColor = .accent
     }
 
     var body: some Scene {

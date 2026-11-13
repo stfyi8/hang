@@ -12,7 +12,7 @@ struct GroupView: View {
     var sizing = Sizing()
     var colors = Colors()
     @Binding var tg: TestGroup
-    @State private var selectedGroupTab: GroupTab = .info
+    @State private var selectedGroupTab: GroupTab = .events
 
     var body: some View {
         NavigationStack {
@@ -80,7 +80,7 @@ struct EventView: View {
     var sizing = Sizing()
     var colors = Colors()
     @Binding var tg: TestGroup
-
+    @State private var showAddView = false
     var body: some View {
         List {
             ForEach($tg.events) { $event in
@@ -103,9 +103,21 @@ struct EventView: View {
                 }
                 .listRowBackground(Color(.systemGray6))
             }
+            Button {
+                showAddView.toggle()
+            } label: {
+                Text("+ Add New Event")
+                    .font(.system(size: sizing.x4))
+                    
+            } .listRowBackground(Color(.systemGray6))
         }
         .padding(.top, -sizing.x4)
         .scrollContentBackground(.hidden)
+        .sheet(isPresented: $showAddView) {
+            CreateEventView(tg: $tg)
+                .presentationDetents([.medium])
+                .presentationBackground(.ultraThinMaterial)
+        }
     }
 }
 
