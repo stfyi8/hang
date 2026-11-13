@@ -6,16 +6,16 @@ struct WeView: View {
     @State var searchQuery = ""
     @State var countPicker: Int = 0
     @State var Groups = [
-        TestGroup(name: "CODZEE")
-        //        TestGroup(name: "Blowtorches", peopleCount: 2),
-        //        TestGroup(name: "Order of the Rolling J", peopleCount: 3),
-        //        TestGroup(name: "Club Automatica '26-7", peopleCount: 4),
-        //        TestGroup(name: "Kiddy party", peopleCount: 5),
-        //        TestGroup(name: "S101 girls", peopleCount: 2),
-        //        TestGroup(name: "Friend chat", peopleCount: 3),
-        //        TestGroup(name: "Are you free on 10th of November", peopleCount: 4),
-        //        TestGroup(name: "ppl with a sungei bedok obsession", peopleCount: 2),
-        //        TestGroup(name: "three3", peopleCount: 3),
+        TestGroup(code: "ABCD67", name: "CODZEE"),
+//        TestGroup(name: "Blowtorches"),
+//        TestGroup(name: "Order of the Rolling J"),
+//        TestGroup(name: "Club Automatica '26-7"),
+//        TestGroup(name: "Kiddy party"),
+//        TestGroup(name: "S101 girls"),
+//        TestGroup(name: "Friend chat"),
+//        TestGroup(name: "Are you free on 10th of November"),
+//        TestGroup(name: "ppl with a sungei bedok obsession"),
+//        TestGroup(name: "three3")
     ]
     @State var showingCreateSheet = false
     @State var showingJoinSheet = false
@@ -64,7 +64,7 @@ struct WeView: View {
                 }
             }
             .sheet(isPresented: $showingCreateSheet) {
-                CreateGroupView()
+                CreateGroupView(tgs: $Groups)
                     .presentationDetents([.medium])
             }
             .sheet(isPresented: $showingJoinSheet) {
@@ -107,19 +107,21 @@ struct GroupCard: View {
                 .aspectRatio(1, contentMode: .fit)
             VStack(alignment: .leading) {
                 Text(tg.name)
-                    .font(.system(size: sizing.x6, weight: .bold))
+                    .font(.system(size: sizing.x5, weight: .bold))
+                    .lineLimit(1)
                     .foregroundStyle(colors.txt1)
                     .padding(.bottom, -sizing.x1)
                 Divider()
                     .frame(height: 1)
                     .overlay(colors.obj)
+                    .padding(.vertical, sizing.x2)
                 Text(tg.desc)
                     .font(.system(size: sizing.x3))
                     .lineLimit(1)
                     .foregroundStyle(colors.txt2)
                 HStack {
                     Text("\(tg.members.count)")
-                        .font(.system(size: sizing.x3, weight: .bold))
+                        .font(.system(size: sizing.x4, weight: .bold))
                         .foregroundStyle(colors.txt2)
                     Image(systemName: "person.2.fill")
                         .resizable()
@@ -130,11 +132,7 @@ struct GroupCard: View {
             }
             .padding(.vertical, sizing.x3)
             .padding(.horizontal, sizing.x4)
-        }
-        .padding(5)
-        //        .background(.regularMaterial)
-        //        .clipShape(RoundedRectangle(cornerRadius: 16))
-        //        .shadow(color: .black.opacity(0.15), radius: 6, x: 3, y: 3)
+        } .padding(5)
     }
 }
 

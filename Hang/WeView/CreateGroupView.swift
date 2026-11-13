@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct CreateGroupView: View {
+    @Environment(\.dismiss) private var dismiss
     @State var groupname: String = ""
     @State var code: String = ""
-
+    @Binding var tgs: Array<TestGroup>
     var body: some View {
         NavigationStack {
             VStack(spacing: 32) {
@@ -45,6 +46,8 @@ struct CreateGroupView: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Confirm", systemImage: "checkmark") {
                         // Add action
+                        tgs.append(TestGroup(code: code, name: groupname))
+                        dismiss()
                     }
                 }
             }
@@ -58,7 +61,7 @@ struct CreateGroupView: View {
                 // else, candidateCode = generateRandomCode()
             }
             // finally, show the REAL code
-            code = "ABCD67"  // put real code here
+            code = generateRandomCode()  // put real code here
         }
     }
 
@@ -88,5 +91,5 @@ struct CreateGroupView: View {
 }
 
 #Preview {
-    CreateGroupView()
+    CreateGroupView(tgs: .constant([]))
 }

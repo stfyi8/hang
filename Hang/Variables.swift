@@ -27,32 +27,6 @@ struct Sizing: DynamicProperty {
     @ScaledMetric var x10: CGFloat = 50
 }
 
-
-public struct TestGroup: Hashable, Identifiable {
-    public let id = UUID()
-    var name: String
-    var desc: String = "Add description here..."
-    var members : Array<Person> = [
-        Person(name: "Tiffany", status: "hello"),
-        Person(name: "Serene", status: "hi"),
-        Person(name: "Iain", status: "hey"),
-        Person(name: "Zixi", status: "wassup")
-    ]
-    var events : Array<GroupEvents> = []
-}
-
-public struct GroupEvents: Hashable, Identifiable {
-    public let id = UUID()
-    var name: String
-    var desc: String = "Add description here..."
-    var time: Double
-}
-public struct Person: Hashable, Identifiable {
-    public let id = UUID()
-    var name: String
-    var status: String = "Add description here..."
-}
-
 public enum clickStyle {
     case None, Tint, Fade, Shrink1, Shrink2
 }
