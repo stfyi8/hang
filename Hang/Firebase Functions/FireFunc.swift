@@ -7,47 +7,71 @@
 
 import SwiftUI
 import FirebaseFirestore
+import FirebaseAuth
 import Combine
 
 class SaveManager: ObservableObject {
     private var db = Firestore.firestore()
-    @Published var profiles = [ProfileData]()
-    private var listener: ListenerRegistration? //
-    
-    // Create Note
-    func addNote(name: String) {
+    @Published var profile: ProfileData?
+    // True once the first snapshot has come back (or failed), so views know the
+    // difference between "still loading" and "this account really has no username".
+    @Published var hasLoadedProfile = false
+    private var listener: ListenerRegistration?
+
+    // Each Apple account gets its own document: Profiles/<firebase uid>
+    private var profileDocument: DocumentReference? {
+        guard let uid = Auth.auth().currentUser?.uid else { return nil }
+        return db.collection(Path.Firestore.profiles).document(uid)
+    }
+
+    // Create / update the signed-in user's own profile
+    func addNote(username: String) {
+        guard let profileDocument else { return }
         do {
-            _ = try db.collection("Profiles").document(ProfileData.accountName).setData(from: ProfileData( username: name ))// saves usename data to aour respective apple account in theory
+            // merge: true keeps the userId field written by FirebaseSignInWithApple
+            try profileDocument.setData(from: ProfileData(username: username), merge: true)
         } catch {
-            print("Error saving score: \(error)") // in case got error this is a failsafe
+            print("Error saving profile: \(error)")
         }
     }
-    
-    // Read Notes
+
+    // Read the signed-in user's own profile
     func getNotes() {
         listener?.remove()
-        listener = db.collection("Profiles").order(by: "name", descending: true).addSnapshotListener { snapshot, error in
-            //sorts in descending alphabetical (.order(by: "model var name", descending: true)) addSnapshotListener triggers when it detects an update
+        hasLoadedProfile = false
+        guard let profileDocument else {
+            profile = nil
+            hasLoadedProfile = true
+            return
+        }
+
+        // Same document ID as the one FirebaseSignInWithApple created on sign in,
+        // so this only ever listens to the current user's data.
+        listener = profileDocument.addSnapshotListener { snapshot, error in
+            // Every path below finishes the load, including errors, so the UI
+            // doesn't sit waiting forever.
+            defer { self.hasLoadedProfile = true }
+
             if let error = error {
-                print("Error getting scores: \(error)")
+                print("Error getting profile: \(error)")
                 return
             }
-            self.profiles = snapshot?.documents.compactMap { document in // loops through the list of data
-                try? document.data(as: ProfileData.self) // converts the raw text to the Swift note object
-            } ?? [] //failsafe, incase got no data default note to blank
+            guard let snapshot, snapshot.exists else {
+                self.profile = nil // no profile saved for this account yet
+                return
+            }
+            self.profile = try? snapshot.data(as: ProfileData.self)
         }
     }
-    
-    
-    // Delete Note
+
+    // Delete the signed-in user's profile
     func deleteNote(save: ProfileData) {
         guard let noteID = save.id else { return }
-        
-        db.collection("Profiles").document(noteID).delete { error in
+
+        db.collection(Path.Firestore.profiles).document(noteID).delete { error in
             if let error = error {
-                print("Error deleting score: \(error)")
+                print("Error deleting profile: \(error)")
             }
         }
     }
 }
-

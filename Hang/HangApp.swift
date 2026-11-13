@@ -12,6 +12,7 @@ import FirebaseSignInWithApple
 
 @main
 struct SwiftChallenge2App: App {
+    
     init(){
         FirebaseApp.configure()
         print("configured Firebase")
@@ -20,7 +21,8 @@ struct SwiftChallenge2App: App {
     var body: some Scene {
         WindowGroup {
             MainView()
-                .configureFirebaseSignInWithAppleWith(firestoreUserCollectionPath: ProfileData.accountName) // Path.Firestore.profiles
+                // FirebaseSignInWithApple creates Profiles/<uid> for every new account
+                .configureFirebaseSignInWithAppleWith(firestoreUserCollectionPath: Path.Firestore.profiles)
                 
         }
     }

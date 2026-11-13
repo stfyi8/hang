@@ -10,6 +10,5 @@ import FirebaseFirestore
 
 struct ProfileData: Identifiable, Codable {
     @DocumentID var id: String?
-    static let accountName = "accountName"
     var username: String
 }

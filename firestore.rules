@@ -1,0 +1,33 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    // One profile document per signed-in Apple account: Profiles/{uid}.
+    // FirebaseSignInWithApple creates it on first sign in, and SaveManager
+    // reads/updates/deletes only the signed-in user's own document.
+    match /Profiles/{uid} {
+      // The owner is the only person who can read their profile.
+      allow get, list: if isOwner(uid);
+
+      // The owner can create/update their profile. If userId is present it
+      // must match the document owner, so the field can't be spoofed.
+      allow create, update: if isOwner(uid)
+        && (!('userId' in request.resource.data)
+            || request.resource.data.userId == uid);
+
+      // The owner can delete their profile (used on account deletion/sign out).
+      allow delete: if isOwner(uid);
+    }
+
+    // Everything else is denied by default.
+  }
+}
