@@ -10,7 +10,7 @@ struct ContentView: View {
             Tab("We", systemImage: "person.and.person.fill") {
                 WeView()
             }
-            Tab("Me", systemImage: "smiley") {
+            Tab("Me", systemImage: "calendar") {
                 MeView()
             }
         }
