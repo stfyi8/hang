@@ -1,10 +1,10 @@
 import SwiftUI
 
-public enum GroupTab : String, CaseIterable, Identifiable {
+public enum GroupTab: String, CaseIterable, Identifiable {
     case cal = "Calendar"
     case events = "Events"
     case info = "More Info"
-    
+
     public var id: Self { self }
 }
 
@@ -13,31 +13,30 @@ struct GroupView: View {
     var colors = Colors()
     @Binding var tg: TestGroup
     @State private var selectedGroupTab: GroupTab = .info
-    
+
     var body: some View {
         NavigationStack {
             ZStack {
-                colors.green1
-                    .ignoresSafeArea()
+                // colors.green1
+                // .ignoresSafeArea()
                 VStack {
                     Picker("Picker", selection: $selectedGroupTab) {
                         ForEach(GroupTab.allCases) {
                             gtab in
                             Text(gtab.rawValue)
-                            
-                            
                         }
                     }
+                    .padding()
                     .pickerStyle(.segmented)
                     if selectedGroupTab == .cal {
                         CalendarView(tg: $tg)
+                            .padding()
                     } else if selectedGroupTab == .events {
                         EventView(tg: $tg)
                     } else if selectedGroupTab == .info {
                         MoreInfoView(tg: $tg)
                     }
                 }
-                .padding()
                 .navigationTitle(tg.name)
             }
         }
@@ -45,10 +44,17 @@ struct GroupView: View {
 }
 
 #Preview {
-    GroupView(tg: .constant(TestGroup(name: "CODZEE", events: [
-        GroupEvents(name: "event1", time: 1720708600),
-        GroupEvents(name: "event2", time: 1790403500)
-    ])))
+    GroupView(
+        tg: .constant(
+            TestGroup(
+                name: "CODZEE",
+                events: [
+                    GroupEvents(name: "event1", time: 1_720_708_600),
+                    GroupEvents(name: "event2", time: 1_790_403_500),
+                ]
+            )
+        )
+    )
 }
 
 struct CalendarView: View {
@@ -59,14 +65,14 @@ struct CalendarView: View {
         VStack {
             ZStack {
                 Rectangle()
-                    .fill(colors.green2)
+                    //                    .fill(colors.green2)
                     .frame(height: 300)
                 Text("calendar goes here")
                     .bold()
-                    .foregroundStyle(colors.txt2)
+                //                    .foregroundStyle(colors.txt2)
             }
             .padding(.vertical)
-            
+
             Spacer()
         }
     }
@@ -77,36 +83,36 @@ struct EventView: View {
     var colors = Colors()
     @Binding var tg: TestGroup
     var body: some View {
-        VStack {
-            List {
-                ForEach($tg.events) { $event in
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text(event.name)
-                                .font(.system(size: sizing.x4))
-                            Divider()
-                                .frame(width: 1)
-                                .overlay(.black)
-                            Text(Date(timeIntervalSince1970: event.time).formatted(date: .numeric, time: .shortened))
-                                .font(.system(size: sizing.x4))
-                            
-                        }
-                        Text(event.desc)
-                            .font(.system(size: sizing.x3))
-                            .lineLimit(1)
-                        
+        //        VStack {
+        List {
+            ForEach($tg.events) { $event in
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text(event.name)
+                            .font(.system(size: sizing.x4))
+                        Divider()
+                            .frame(width: 1)
+                            .overlay(.black)
+                        Text(
+                            Date(timeIntervalSince1970: event.time)
+                                .formatted(date: .numeric, time: .shortened)
+                        )
+                        .font(.system(size: sizing.x4))
+
                     }
-                    .listRowBackground(colors.green2)
-                    
-                    
-                    
+                    Text(event.desc)
+                        .font(.system(size: sizing.x3))
+                        .lineLimit(1)
+
                 }
+                .listRowBackground(Color(.systemGray6))
             }
-            .padding(.horizontal, -sizing.x2)
-            .scrollContentBackground(.hidden)
-            
-            Spacer()
         }
+        //            .padding(.horizontal, -sizing.x2)
+        .scrollContentBackground(.hidden)
+
+        //            Spacer()
+        //        }
     }
 }
 
@@ -143,12 +149,9 @@ struct MoreInfoView: View {
                         }
                     }
                 }
-                
-                
             }
         }
         .padding(.horizontal, sizing.x2)
         .padding(.vertical, sizing.x4)
     }
 }
-

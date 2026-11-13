@@ -1,3 +1,10 @@
+//
+//  CreateGroupView.swift
+//  Hang
+//
+//  Created by T Krobot on 11/11/26.
+//
+
 import SwiftUI
 
 struct JoinGroupView: View {
@@ -51,12 +58,12 @@ struct JoinGroupView: View {
                 Text("Please double-check the entered group code.")
             }
             .toolbar {
-                // Top-right button with SF Symbol
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Confirm", systemImage: "checkmark") {
                         if code != "CODZEE" {
                             showAlert = true
                         }
+                        // Add action
                     }
                 }
             }

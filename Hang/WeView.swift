@@ -7,6 +7,15 @@ struct WeView: View {
     @State var countPicker: Int = 0
     @State var Groups = [
         TestGroup(name: "CODZEE")
+        //        TestGroup(name: "Blowtorches", peopleCount: 2),
+        //        TestGroup(name: "Order of the Rolling J", peopleCount: 3),
+        //        TestGroup(name: "Club Automatica '26-7", peopleCount: 4),
+        //        TestGroup(name: "Kiddy party", peopleCount: 5),
+        //        TestGroup(name: "S101 girls", peopleCount: 2),
+        //        TestGroup(name: "Friend chat", peopleCount: 3),
+        //        TestGroup(name: "Are you free on 10th of November", peopleCount: 4),
+        //        TestGroup(name: "ppl with a sungei bedok obsession", peopleCount: 2),
+        //        TestGroup(name: "three3", peopleCount: 3),
     ]
     @State var showingCreateSheet = false
     @State var showingJoinSheet = false
@@ -34,14 +43,16 @@ struct WeView: View {
                 VStack {
                     LazyVGrid(columns: columns, spacing: sizing.x1) {
                         ForEach(results) { tg in
-                            if let index = Groups.firstIndex(where: { $0.id == tg.id }) {
-                                        NavigationLink {
-                                            GroupView(tg: $Groups[index])
-                                        } label: {
-                                            GroupCard(tg: tg)
-                                        }
-                                        .buttonStyle(setStyle(styleName: .Shrink2))
-                                    }
+                            if let index = Groups.firstIndex(where: {
+                                $0.id == tg.id
+                            }) {
+                                NavigationLink {
+                                    GroupView(tg: $Groups[index])
+                                } label: {
+                                    GroupCard(tg: tg)
+                                }
+                                .buttonStyle(setStyle(styleName: .Shrink2))
+                            }
                         }
                     }
                     .padding()
@@ -103,9 +114,9 @@ struct GroupCard: View {
                     .frame(height: 1)
                     .overlay(colors.obj)
                 Text(tg.desc)
-                        .font(.system(size: sizing.x3))
-                        .lineLimit(1)
-                        .foregroundStyle(colors.txt2)
+                    .font(.system(size: sizing.x3))
+                    .lineLimit(1)
+                    .foregroundStyle(colors.txt2)
                 HStack {
                     Text("\(tg.members.count)")
                         .font(.system(size: sizing.x3, weight: .bold))
@@ -119,7 +130,11 @@ struct GroupCard: View {
             }
             .padding(.vertical, sizing.x3)
             .padding(.horizontal, sizing.x4)
-        } .padding(sizing.x1)
+        }
+        .padding(5)
+        //        .background(.regularMaterial)
+        //        .clipShape(RoundedRectangle(cornerRadius: 16))
+        //        .shadow(color: .black.opacity(0.15), radius: 6, x: 3, y: 3)
     }
 }
 

@@ -21,7 +21,6 @@
   ],
   "files": [
     { "kind": "folder", "path": "Hang", "target-membership": [ "Hang" ] },
-    { "path": "GoogleService-Info.plist", "target-membership": [ "Hang/resources" ] },
     {
       "kind": "group",
       "name": "Products",
