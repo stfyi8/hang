@@ -6,7 +6,7 @@ struct WeView: View {
     @State var searchQuery = ""
     @State var countPicker: Int = 0
     @State var Groups = [
-        TestGroup(name: "two", peopleCount: 2, time: 0),
+        TestGroup(name: "two", peopleCount: 2, time: -500000),
         TestGroup(name: "three", peopleCount: 3, time: 0),
         TestGroup(name: "four", peopleCount: 4, time: 0),
         TestGroup(name: "five", peopleCount: 5, time: 0),
@@ -14,60 +14,37 @@ struct WeView: View {
         TestGroup(name: "three2", peopleCount: 3, time: 0),
         TestGroup(name: "four2", peopleCount: 4, time: 0),
         TestGroup(name: "two3", peopleCount: 2, time: 0),
-        TestGroup(name: "three3", peopleCount: 3, time: 0)
+        TestGroup(name: "three3", peopleCount: 3, time: 0),
     ]
+    @State var showingCreateSheet = false
+    @State var showingJoinSheet = false
+
     var results: [TestGroup] {
         var filtered = Groups
-            // Filter 2: Apply search text filter
-            if !searchQuery.isEmpty {
-                filtered = filtered.filter { $0.name.localizedCaseInsensitiveContains(searchQuery) }
+        // Filter 2: Apply search text filter
+        if !searchQuery.isEmpty {
+            filtered = filtered.filter {
+                $0.name.localizedCaseInsensitiveContains(searchQuery)
             }
+        }
         if !(countPicker == 0) {
-                filtered = filtered.filter { $0.peopleCount == countPicker }
-            }
+            filtered = filtered.filter { $0.peopleCount == countPicker }
+        }
         return filtered
     }
     let columns = [
         GridItem(.adaptive(minimum: 150))
-        ]
+    ]
     @FocusState var isFocused: Bool
+
     var body: some View {
-        ZStack {
-            Color(red: 1, green: 1, blue: 1)
-                .ignoresSafeArea()
-                .onTapGesture { isFocused = false }
-            VStack {
-                HStack {
-                    TextField("Name", text: $searchQuery)
-                        .textFieldStyle(.roundedBorder)
-                    Divider()
-                        .frame(width: 1, height: 30)
-                        .overlay(colors.obj)
-                        .padding(.horizontal, sizing.x1)
-                    Image(systemName: "person.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: sizing.x4)
-                    Picker("Headcount", selection: $countPicker) {
-                            Text("N/A")
-                                .tag(0)
-                        ForEach(2...10, id: \.self) { x in
-                                    Text("\(x)")
-                                .tag(x)
-                                }
-                            }
-                            .pickerStyle(.menu)
-                            .tint(.black)
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(colors.obj.opacity(0.15))
-                            )
-                } .padding()
-                ScrollView {
+        NavigationStack {
+            ScrollView {
+                VStack {
                     LazyVGrid(columns: columns, spacing: sizing.x1) {
-                        ForEach(results, id: \.self){ tg in
+                        ForEach(results, id: \.self) { tg in
                             Button {
-                                
+
                             } label: {
                                 GroupCard(tg: tg)
                             }
@@ -75,22 +52,50 @@ struct WeView: View {
                         }
                     }
                     .padding()
+                    .ignoresSafeArea()
+                    .searchable(
+                        text: $searchQuery,
+                        placement: .navigationBarDrawer(displayMode: .always)
+                    )
                 }
-                .ignoresSafeArea()
-//                .padding(15)
-                .searchable(text: $searchQuery)
-//                Spacer()
             }
-            
+            .sheet(isPresented: $showingCreateSheet) {
+                CreateGroupView()
+                    .presentationDetents([.medium])
+            }
+            .sheet(isPresented: $showingJoinSheet) {
+                JoinGroupView()
+                    .presentationDetents([.medium])
+            }
+            .navigationTitle("Groups")
+            .toolbarTitleDisplayMode(.inlineLarge)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Profile", systemImage: "person.fill") {
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Menu {
+                        Button("Create") {
+                            showingCreateSheet = true
+                        }
+                        Button("Join") {
+                            showingJoinSheet = true
+                        }
+                    } label: {
+                        Label("Add", systemImage: "plus")
+                    }
+                }
+            }
         }
     }
-        
+
 }
 
 struct GroupCard: View {
     @State var sizing = Sizing()
     @State var colors = Colors()
-    let tg : TestGroup
+    let tg: TestGroup
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
@@ -105,18 +110,23 @@ struct GroupCard: View {
                     .frame(height: 1)
                     .overlay(colors.obj)
                 Text(tg.desc)
-                        .font(.system(size: sizing.x3))
-                        .lineLimit(1)
-                        .foregroundStyle(colors.txt2)
+                    .font(.system(size: sizing.x3))
+                    .lineLimit(1)
+                    .foregroundStyle(colors.txt2)
                 HStack {
                     Image(systemName: "calendar")
                         .resizable()
                         .scaledToFit()
                         .foregroundStyle(colors.obj)
                         .frame(width: sizing.x3)
-                    Text(Date(timeIntervalSince1970: tg.time).formatted(date: .numeric, time: .omitted))
-                        .font(.system(size: sizing.x3))
-                        .foregroundStyle(colors.txt2)
+                    Text(
+                        Date(timeIntervalSince1970: tg.time).formatted(
+                            date: .numeric,
+                            time: .omitted
+                        )
+                    )
+                    .font(.system(size: sizing.x3))
+                    .foregroundStyle(colors.txt2)
                 }
                 HStack {
                     Image(systemName: "clock")
@@ -124,9 +134,14 @@ struct GroupCard: View {
                         .scaledToFit()
                         .foregroundStyle(colors.obj)
                         .frame(width: sizing.x3)
-                    Text(Date(timeIntervalSince1970: tg.time).formatted(date: .omitted, time: .shortened))
-                        .font(.system(size: sizing.x3))
-                        .foregroundStyle(colors.txt2)
+                    Text(
+                        Date(timeIntervalSince1970: tg.time).formatted(
+                            date: .omitted,
+                            time: .shortened
+                        )
+                    )
+                    .font(.system(size: sizing.x3))
+                    .foregroundStyle(colors.txt2)
                 }
                 HStack {
                     Text("\(tg.peopleCount)")
@@ -141,7 +156,7 @@ struct GroupCard: View {
             }
             .padding(.vertical, sizing.x3)
             .padding(.horizontal, sizing.x4)
-        } .padding(sizing.x1)
+        }.padding(sizing.x1)
     }
 }
 
