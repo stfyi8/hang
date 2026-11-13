@@ -28,6 +28,7 @@
         { "path": "<PRODUCTS>/Hang.app", "id": "BB29318330A461D100150294", "type": "wrapper.application", "index": false },
       ],
     },
+    { "path": "GoogleService-Info.plist", "target-membership": [ "Hang/resources" ] },
   ],
   "targets": [
     {

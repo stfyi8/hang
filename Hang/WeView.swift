@@ -6,15 +6,15 @@ struct WeView: View {
     @State var searchQuery = ""
     @State var countPicker: Int = 0
     @State var Groups = [
-        TestGroup(name: "two", peopleCount: 2, time: -500000),
-        TestGroup(name: "three", peopleCount: 3, time: 0),
-        TestGroup(name: "four", peopleCount: 4, time: 0),
-        TestGroup(name: "five", peopleCount: 5, time: 0),
-        TestGroup(name: "two2", peopleCount: 2, time: 0),
-        TestGroup(name: "three2", peopleCount: 3, time: 0),
-        TestGroup(name: "four2", peopleCount: 4, time: 0),
-        TestGroup(name: "two3", peopleCount: 2, time: 0),
-        TestGroup(name: "three3", peopleCount: 3, time: 0),
+        TestGroup(name: "two", peopleCount: 2),
+        TestGroup(name: "three", peopleCount: 3),
+        TestGroup(name: "four", peopleCount: 4),
+        TestGroup(name: "five", peopleCount: 5),
+        TestGroup(name: "two2", peopleCount: 2),
+        TestGroup(name: "three2", peopleCount: 3),
+        TestGroup(name: "four2", peopleCount: 4),
+        TestGroup(name: "two3", peopleCount: 2),
+        TestGroup(name: "three3", peopleCount: 3)
     ]
     @State var showingCreateSheet = false
     @State var showingJoinSheet = false
@@ -110,39 +110,9 @@ struct GroupCard: View {
                     .frame(height: 1)
                     .overlay(colors.obj)
                 Text(tg.desc)
-                    .font(.system(size: sizing.x3))
-                    .lineLimit(1)
-                    .foregroundStyle(colors.txt2)
-                HStack {
-                    Image(systemName: "calendar")
-                        .resizable()
-                        .scaledToFit()
-                        .foregroundStyle(colors.obj)
-                        .frame(width: sizing.x3)
-                    Text(
-                        Date(timeIntervalSince1970: tg.time).formatted(
-                            date: .numeric,
-                            time: .omitted
-                        )
-                    )
-                    .font(.system(size: sizing.x3))
-                    .foregroundStyle(colors.txt2)
-                }
-                HStack {
-                    Image(systemName: "clock")
-                        .resizable()
-                        .scaledToFit()
-                        .foregroundStyle(colors.obj)
-                        .frame(width: sizing.x3)
-                    Text(
-                        Date(timeIntervalSince1970: tg.time).formatted(
-                            date: .omitted,
-                            time: .shortened
-                        )
-                    )
-                    .font(.system(size: sizing.x3))
-                    .foregroundStyle(colors.txt2)
-                }
+                        .font(.system(size: sizing.x3))
+                        .lineLimit(1)
+                        .foregroundStyle(colors.txt2)
                 HStack {
                     Text("\(tg.peopleCount)")
                         .font(.system(size: sizing.x3, weight: .bold))
@@ -156,10 +126,33 @@ struct GroupCard: View {
             }
             .padding(.vertical, sizing.x3)
             .padding(.horizontal, sizing.x4)
-        }.padding(sizing.x1)
+        } .padding(sizing.x1)
     }
 }
 
 #Preview {
     WeView()
 }
+
+/*
+HStack {
+    Image(systemName: "calendar")
+        .resizable()
+        .scaledToFit()
+        .foregroundStyle(colors.obj)
+        .frame(width: sizing.x3)
+    Text(Date(timeIntervalSince1970: tg.time).formatted(date: .numeric, time: .omitted))
+        .font(.system(size: sizing.x3))
+        .foregroundStyle(colors.txt2)
+}
+HStack {
+    Image(systemName: "clock")
+        .resizable()
+        .scaledToFit()
+        .foregroundStyle(colors.obj)
+        .frame(width: sizing.x3)
+    Text(Date(timeIntervalSince1970: tg.time).formatted(date: .omitted, time: .shortened))
+        .font(.system(size: sizing.x3))
+        .foregroundStyle(colors.txt2)
+}
+*/

@@ -1,10 +1,3 @@
-//
-//  CreateGroupView.swift
-//  Hang
-//
-//  Created by T Krobot on 11/11/26.
-//
-
 import SwiftUI
 
 struct CreateGroupView: View {

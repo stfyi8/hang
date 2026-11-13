@@ -1,36 +1,35 @@
-//
-//  GroupView.swift
-//  Hang
-//
-//  Created by T Krobot on 11/11/26.
-//
-
 import SwiftUI
 
+public enum GroupTab : String, CaseIterable, Identifiable {
+    case cal = "Calendar"
+    case events = "Events"
+    case info = "More Info"
+    
+    public var id: Self { self }
+}
+
 struct GroupView: View {
-    @State private var selectedGroupTab = 0
+    @State private var selectedGroupTab: GroupTab = .cal
 
     var body: some View {
         NavigationStack {
             VStack {
                 Picker("Picker", selection: $selectedGroupTab) {
-                    Text("Calendar").tag(0)
-                    Text("Events").tag(1)
-                    Text("Info").tag(2)
+                    ForEach(GroupTab.allCases) {
+                        gtab in
+                        Text(gtab.rawValue)
+                        
+                        
+                    }
                 }
                 .pickerStyle(.segmented)
-
-                ZStack {
-                    Rectangle()
-                        .fill(.green)
-                        .frame(height: 300)
-                    Text("calendar goes here")
-                        .bold()
-                        .foregroundStyle(.white)
+                if selectedGroupTab == .cal {
+                    CalendarView()
+                } else if selectedGroupTab == .events {
+                    EventView()
+                } else if selectedGroupTab == .info {
+                    MoreInfoView()
                 }
-                .padding(.vertical)
-
-                Spacer()
             }
             .padding()
             .navigationTitle("Order of the Rolling J")
@@ -40,4 +39,40 @@ struct GroupView: View {
 
 #Preview {
     GroupView()
+}
+
+struct CalendarView: View {
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                Rectangle()
+                    .fill(.green)
+                    .frame(height: 300)
+                Text("calendar goes here")
+                    .bold()
+                    .foregroundStyle(.white)
+            }
+            .padding(.vertical)
+
+            Spacer()
+        }
+    }
+}
+
+struct EventView: View {
+    var body: some View {
+        NavigationStack {
+            
+            Spacer()
+        }
+    }
+}
+
+struct MoreInfoView: View {
+    var body: some View {
+        NavigationStack {
+            
+            Spacer()
+        }
+    }
 }

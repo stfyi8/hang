@@ -25,6 +25,13 @@ public struct TestGroup: Hashable, Identifiable {
     var name: String
     var desc: String = "Add description here..."
     var peopleCount: Int
+    var events : Array<GroupEvents> = []
+}
+
+public struct GroupEvents: Hashable, Identifiable {
+    public let id = UUID()
+    var name: String
+    var desc: String = "Add description here..."
     var time: Double
 }
 
