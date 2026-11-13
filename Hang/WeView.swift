@@ -100,7 +100,7 @@ struct GroupCard: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
-                .fill(colors.bg)
+                .fill(colors.green)
                 .aspectRatio(1, contentMode: .fit)
             VStack(alignment: .leading) {
                 Text(tg.name)

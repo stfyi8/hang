@@ -17,7 +17,7 @@ struct GroupView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                colors.bg1
+                colors.green1
                     .ignoresSafeArea()
                 VStack {
                     Picker("Picker", selection: $selectedGroupTab) {
@@ -56,7 +56,7 @@ struct CalendarView: View {
         VStack {
             ZStack {
                 Rectangle()
-                    .fill(colors.bg2)
+                    .fill(colors.green2)
                     .frame(height: 300)
                 Text("calendar goes here")
                     .bold()
@@ -93,7 +93,7 @@ struct EventView: View {
                             .lineLimit(1)
                         
                     }
-                    .listRowBackground(colors.bg2)
+                    .listRowBackground(colors.green2)
                     
                     
                     
