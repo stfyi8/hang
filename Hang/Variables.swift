@@ -25,7 +25,10 @@ public struct TestGroup: Hashable, Identifiable {
     var name: String
     var desc: String = "Add description here..."
     var peopleCount: Int
-    var events : Array<GroupEvents> = []
+    var events : Array<GroupEvents> = [
+        GroupEvents(name: "event1", time: 1720708600),
+        GroupEvents(name: "event2", time: 1790403500)
+    ]
 }
 
 public struct GroupEvents: Hashable, Identifiable {

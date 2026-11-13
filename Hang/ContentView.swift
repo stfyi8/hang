@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var sizing = Sizing()
+    var sizing = Sizing()
     var body: some View {
         VStack {
             TabView() {

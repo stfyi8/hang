@@ -9,8 +9,10 @@ public enum GroupTab : String, CaseIterable, Identifiable {
 }
 
 struct GroupView: View {
-    @State private var selectedGroupTab: GroupTab = .cal
-
+    var sizing = Sizing()
+    var colors = Colors()
+    @Binding var tg: TestGroup
+    @State private var selectedGroupTab: GroupTab = .events
     var body: some View {
         NavigationStack {
             VStack {
@@ -24,44 +26,73 @@ struct GroupView: View {
                 }
                 .pickerStyle(.segmented)
                 if selectedGroupTab == .cal {
-                    CalendarView()
+                    CalendarView(tg: $tg)
                 } else if selectedGroupTab == .events {
-                    EventView()
+                    EventView(tg: $tg)
                 } else if selectedGroupTab == .info {
-                    MoreInfoView()
+                    MoreInfoView(tg: $tg)
                 }
             }
             .padding()
-            .navigationTitle("Order of the Rolling J")
+            .navigationTitle(tg.name)
         }
     }
 }
 
 #Preview {
-    GroupView()
+    GroupView(tg: .constant(TestGroup(name: "two", peopleCount: 2)))
 }
 
 struct CalendarView: View {
+    var sizing = Sizing()
+    var colors = Colors()
+    @Binding var tg: TestGroup
     var body: some View {
-        NavigationStack {
+        VStack {
             ZStack {
                 Rectangle()
-                    .fill(.green)
+                    .fill(colors.bg)
                     .frame(height: 300)
                 Text("calendar goes here")
                     .bold()
-                    .foregroundStyle(.white)
+                    .foregroundStyle(colors.txt2)
             }
             .padding(.vertical)
-
+            
             Spacer()
         }
     }
 }
 
 struct EventView: View {
+    var sizing = Sizing()
+    var colors = Colors()
+    @Binding var tg: TestGroup
     var body: some View {
-        NavigationStack {
+        VStack {
+            List {
+                ForEach($tg.events) { $event in
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text(event.name)
+                                .font(.system(size: sizing.x4))
+                            Divider()
+                                .frame(width: 1)
+                                .overlay(.black)
+                            Text(Date(timeIntervalSince1970: event.time).formatted(date: .numeric, time: .shortened))
+                                .font(.system(size: sizing.x4))
+                            
+                        }
+                        Text(event.desc)
+                            .font(.system(size: sizing.x3))
+                            .lineLimit(1)
+                        
+                    }
+                    
+                }
+                
+                
+            }
             
             Spacer()
         }
@@ -69,10 +100,12 @@ struct EventView: View {
 }
 
 struct MoreInfoView: View {
+    @Binding var tg: TestGroup
     var body: some View {
-        NavigationStack {
+        VStack {
             
             Spacer()
         }
     }
 }
+

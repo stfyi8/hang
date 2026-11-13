@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct WeView: View {
-    @State var sizing = Sizing()
-    @State var colors = Colors()
+    var sizing = Sizing()
+    var colors = Colors()
     @State var searchQuery = ""
     @State var countPicker: Int = 0
     @State var Groups = [
@@ -18,7 +18,6 @@ struct WeView: View {
     ]
     @State var showingCreateSheet = false
     @State var showingJoinSheet = false
-
     var results: [TestGroup] {
         var filtered = Groups
         // Filter 2: Apply search text filter
@@ -42,13 +41,15 @@ struct WeView: View {
             ScrollView {
                 VStack {
                     LazyVGrid(columns: columns, spacing: sizing.x1) {
-                        ForEach(results, id: \.self) { tg in
-                            Button {
-
-                            } label: {
-                                GroupCard(tg: tg)
-                            }
-                            .buttonStyle(setStyle(styleName: .Shrink2))
+                        ForEach(results) { tg in
+                            if let index = Groups.firstIndex(where: { $0.id == tg.id }) {
+                                        NavigationLink {
+                                            GroupView(tg: $Groups[index])
+                                        } label: {
+                                            GroupCard(tg: tg)
+                                        }
+                                        .buttonStyle(setStyle(styleName: .Shrink2))
+                                    }
                         }
                     }
                     .padding()
@@ -93,8 +94,8 @@ struct WeView: View {
 }
 
 struct GroupCard: View {
-    @State var sizing = Sizing()
-    @State var colors = Colors()
+    var sizing = Sizing()
+    var colors = Colors()
     let tg: TestGroup
     var body: some View {
         ZStack {
